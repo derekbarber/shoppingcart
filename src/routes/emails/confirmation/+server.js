@@ -10,9 +10,9 @@ AWS.config.update({
 
 
 const emailHtml = render({
-	component: Welcome,
+	template: Welcome,
 	props: {
-		name: 'Svelte'
+		firstName: 'John'
 	}
 });
 
