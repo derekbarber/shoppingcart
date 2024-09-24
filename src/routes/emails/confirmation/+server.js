@@ -5,7 +5,7 @@ import AWS from 'aws-sdk';
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
+  region: "us-west-2",
 });
 
 
@@ -17,9 +17,9 @@ const emailHtml = render({
 });
 
 const options = {
-	Source: 'you@example.com',
+	Source: 'info@pbcards.ca',
 	Destination: {
-		ToAddresses: ['user@gmail.com']
+		ToAddresses: ['derekbarber@gmail.com']
 	},
 	Message: {
 		Body: {
@@ -35,7 +35,7 @@ const options = {
 	}
 };
 
-const sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(options).promise();
+//const sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(options).promise();
 
 export async function GET() {
 	new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(options).promise();
