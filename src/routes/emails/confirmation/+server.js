@@ -1,5 +1,5 @@
 import { render } from 'svelte-email';
-import UserEmail from '$lib/emails/UserEmail.svelte';
+import Welcome from '$lib/emails/Welcome.svelte';
 import AWS from 'aws-sdk';
 
 AWS.config.update({
@@ -10,7 +10,7 @@ AWS.config.update({
 
 
 const emailHtml = render({
-	component: Hello,
+	component: Welcome,
 	props: {
 		name: 'Svelte'
 	}
