@@ -1,6 +1,19 @@
 <script>
   import logo from "$lib/images/pb-logo.jpg";
 
+  import { Resend } from 'resend';
+
+  const resend = new Resend('re_caxSRCyD_53aJRtXz68CKmATZdtcXwehk');
+
+  let name = ""
+  let email = ""
+  let how_paying = "etransfer"
+  let phone_number = ""
+  let need_passphrase = false
+  let pickup_location = ""
+
+  let errors = []
+
   let categories = [
     {
       id: 1,
@@ -56,7 +69,7 @@
       category: 1,
       selected: false,
       name: "Superstore / Extra Foods",
-      cards: ["$10", "$25", "$50", "$100", "$250"],
+      cards: ["$25", "$50", "$100", "$250"],
     },
     {
       id: 6,
@@ -306,6 +319,64 @@
 
     return total;
   }
+
+  const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+  function validateForm() {
+    errors = []
+    if (name.length < 3) {
+      errors.push("Please enter a name of at least 3 characters")
+    }
+    if (email.length == 0 || validateEmail(email)) {
+      errors.push("Please enter a valid email")
+    }
+    if (phone_number.length <  10) {
+      errors.push("Please enter a full 10-digit phone number with area code")
+    }
+    if (pickup_location.length == 0) {
+      errors.push("Please select your pickup time and location")
+    }
+    if (shopping_cards.length == 0) {
+      errors.push("Please select at least one shopping card")
+    }
+  }
+
+  function submitOrder() {
+
+    validateForm()
+
+    if (errors.length > 0) {
+      return false
+    }
+
+    let order_html = `<p>The following order was placed for Shopping Cards</p>\
+      <p>Name: ${name}</p>\
+      <p>Email: ${email}</p>\
+      <p>Phone Number: ${phone_number}</p>\
+    `
+
+    resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'derekbarber@gmail.com',
+      subject: 'Precious Blood Parish - Shopping Card Order Received',
+      html: order_html
+    });
+
+    resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'derekbarber@gmail.com',
+      subject: 'Precious Blood Parish - Shopping Card Order Confirmation',
+      html: '<p>Thank you for placing an order for Shopping Cards. We have received your order successfully.</p>'
+    });
+  }
+
+
 </script>
 
 <div class="flex">
@@ -353,6 +424,17 @@
     </ul>
   </div>
 </div>
+
+{#if errors.length > 0}
+  <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
+    <p class="text-lg font-bold">Please fix the following issues with your form:</p>
+    <ul class="list-disc p-2 ml-6">
+    {#each errors as error}
+      <li>{error}</li>
+    {/each}
+    </ul>
+  </div>
+  {/if}
 <form class="mt-6">
   <div class="space-y-6">
     <div
@@ -385,6 +467,7 @@
                 type="text"
                 name="name"
                 id="name"
+                bind:value={name}
                 class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               />
             </div>
@@ -402,6 +485,7 @@
               id="email"
               name="email"
               type="email"
+              bind:value={email}
               autocomplete="email"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -416,14 +500,15 @@
           >
           <div class="mt-2">
             <select
-              id="country"
-              name="country"
-              autocomplete="country-name"
+              id="how_paying"
+              name="how_paying"
+              bind:value={how_paying}
+              autocomplete="etransfer"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              <option>Cash</option>
-              <option>Interact e-Transfer</option>
-              <option>Cheque</option>
+              <option value="etransfer">Interact e-Transfer</option>
+              <option value="cash">Cash</option>
+              <option value="cheque">Cheque</option>
             </select>
           </div>
           <p class="mt-3 text-sm leading-6 text-gray-600">
@@ -433,24 +518,60 @@
           </p>
         </div>
 
+        {#if how_paying === "etransfer"}
+        <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
+        <fieldset>
+          <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
+          <div class="mt-6 space-y-6">
+          <div class="flex items-center gap-x-3">
+            <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+            <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
+          </div>
+          </div>
+
+          <div class="mt-4">
+            <label
+              for="phone-number"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Phone Number</label
+            >
+            <div class="mt-2">
+              <input
+              id="phone-number"
+              name="phone_number"
+              type="text"
+              bind:value={phone_number}
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+            </div>
+            <p class="mt-3 text-sm leading-6 text-gray-600">
+              We will call you at this number with the required passphrase for e-Transfer. Please do not send your e-Transfer
+              until you receive the passphrase.
+            </p>
+          </div>
+          </fieldset>
+          </div>
+        {/if}
+
+
         <div class="col-span-full">
           <label
-            for="country"
+            for="pickup-location"
             class="block text-sm font-medium leading-6 text-gray-900"
             >Pick-up location & time</label
           >
           <div class="mt-2">
             <select
-              id="country"
-              name="country"
-              autocomplete="country-name"
+              id="pickup-location"
+              name="pickup-location"
+              bind:value={pickup_location}
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              <option>Saturday 4:30pm Mass</option>
-              <option>Sunday 9:00am Mass</option>
-              <option>Sunday 11:00am Mass</option>
-              <option>Parish Office Weekday Hours</option>
-              <option>CCS Office Weekday Hours</option>
+              <option value="">Choose Pickup Location and Time</option>
+              <option value="Saturday 4:30pm Mass">Saturday 4:30pm Mass</option>
+              <option value="Sunday 9am Mass">Sunday 9:00am Mass</option>
+              <option value="Sunday 11am Mass">Sunday 11:00am Mass</option>
+              <option value="Earl Coatta's House">Earl Coatta's House</option>
             </select>
           </div>
           <p class="mt-3 text-sm leading-6 text-gray-600">
@@ -597,9 +718,13 @@
     </div>
   </div>
 
+
+
+
   <div class="mt-6 flex items-center justify-end gap-x-6">
     <button
       type="submit"
+      on:click={submitOrder}
       class="rounded-md bg-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >SUBMIT ORDER</button
     >
