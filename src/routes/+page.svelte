@@ -346,7 +346,9 @@
           Shopping Card Selection
         </h2>
         <p class="mt-1 text-sm leading-6 text-gray-600">
-          Choose the Shopping Cards for your order.
+          Choose the Shopping Cards for your order. Most of these cards are in inventory but some
+          are only available upon request. You will be notified if any cards are not
+          in stock after you submit your order.
         </p>
       </div>
 
