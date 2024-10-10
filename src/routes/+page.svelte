@@ -13,6 +13,8 @@
   let need_passphrase = false
   let pickup_location = ""
 
+  let submitted = false
+
   let errors = []
   let shopping_cards = cards
 
@@ -106,6 +108,8 @@
       return false
     }
 
+    submitted = true
+
     let order_html = `<p>The following order was placed for Shopping Cards.</p><br>\
       <p>Details of Purchaser</p>
       <p>Name: ${name}</p>\
@@ -190,7 +194,14 @@
   </div>
 </div>
 
-{#if errors.length > 0}
+{#if submitted}
+<div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
+  <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
+    confirmation.
+  </p>
+</div>
+{/if}
+{:else if errors.length > 0}
   <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
     <p class="text-lg font-bold">Please fix the following issues with your form:</p>
     <ul class="list-disc p-2 ml-6">
