@@ -109,43 +109,23 @@
     }
 
     submitted = true
+    /*
+    fetch('/emails/confirmation', {
+			method: 'POST',
+      body: {
+        name: name,
+        email, email,
+        phone_number: phone_number,
+        how_paying: how_paying,
+        pickup_location: pickup_location,
+        need_passphrase: need_passphrase,
+        purchased_cards: purchased_cards,
+        total_cost: totalCost()
+      }
+		});
+    */
 
-    let order_html = `<p>The following order was placed for Shopping Cards.</p><br>\
-      <p>Details of Purchaser</p>
-      <p>Name: ${name}</p>\
-      <p>Email: ${email}</p>\
-      <p>Phone Number: ${phone_number}</p><br>\
-      <p>How Are they Paying: ${how_paying}</p><br>\
-      <p>Pickup Location: ${pickup_location}</p><br>`
-
-    if (how_paying == 'etransfer') {
-      order_html += `<p>Do they need the passphrase? ${need_passphrase}</p>`
-    }
-
-    order_html += `<br><p>Shopping Cards</p><br>`
-
-    for (const purchased_card of purchased_cards) {
-      order_html += `<p> - {purchased_card.name}: {purchased_card.value} x {purchased_card.quantity}</p>`
-    }
-
-    order_html += `<br><p>TOTAL COST: ${totalCost()}</p>`
-
-    resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'derekbarber@gmail.com',
-      subject: 'Precious Blood Parish - Shopping Card Order Received',
-      html: order_html
-    });
-
-    resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'derekbarber@gmail.com',
-      subject: 'Precious Blood Parish - Shopping Card Order Confirmation',
-      html: '<p>Thank you for placing an order for Shopping Cards. We have received your order successfully.</p>'
-    });
   }
-
-
 </script>
 
 <div class="flex">
@@ -194,13 +174,8 @@
   </div>
 </div>
 
-{#if submitted}
-  <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
-    <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
-      confirmation.
-    </p>
-  </div>
-{:else if errors.length > 0}
+
+{#if errors.length > 0}
   <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
     <p class="text-lg font-bold">Please fix the following issues with your form:</p>
     <ul class="list-disc p-2 ml-6">
@@ -210,6 +185,14 @@
     </ul>
   </div>
   {/if}
+
+  {#if submitted}
+  <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
+    <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
+      confirmation.
+    </p>
+  </div>
+  {:else}
 <form class="mt-6">
   <div class="space-y-6">
     <div
@@ -220,8 +203,7 @@
           Your Details
         </h2>
         <p class="mt-1 text-sm leading-6 text-gray-600">
-          This information will be displayed publicly so be careful what you
-          share.
+          Please fill out these details carefully to ensure an accurate ordering process.
         </p>
       </div>
 
@@ -504,6 +486,7 @@
     >
   </div>
 </form>
+{/if}
 
 <style lang="postcss">
   :global(html) {
