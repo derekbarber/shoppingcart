@@ -195,12 +195,11 @@
 </div>
 
 {#if submitted}
-<div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
-  <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
-    confirmation.
-  </p>
-</div>
-{/if}
+  <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
+    <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
+      confirmation.
+    </p>
+  </div>
 {:else if errors.length > 0}
   <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
     <p class="text-lg font-bold">Please fix the following issues with your form:</p>
