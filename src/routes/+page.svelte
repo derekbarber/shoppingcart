@@ -1,10 +1,8 @@
 <script>
   import logo from "$lib/images/pb-logo.jpg";
 
-  import { Resend } from 'resend';
+  import { fade } from 'svelte/transition';
   import { categories, cards } from './cards.js'
-
-  const resend = new Resend('re_caxSRCyD_53aJRtXz68CKmATZdtcXwehk');
 
   let name = ""
   let email = ""
@@ -61,12 +59,11 @@
   }
 
   function totalCost() {
-    console.log(purchased_cards);
+    //console.log(purchased_cards);
     let total = 0;
     purchased_cards.forEach((pc) => {
       let amount = pc.value.replace(/[^0-9.-]+/g, "");
       let subtotal = parseInt(amount, 10) * parseInt(pc.quantity, 10);
-      console.log(subtotal);
       total += subtotal;
     });
 
@@ -109,22 +106,20 @@
     }
 
     submitted = true
-    /*
+
     fetch('/emails/confirmation', {
 			method: 'POST',
-      body: {
+      body: JSON.stringify({
         name: name,
-        email, email,
+        email: email,
         phone_number: phone_number,
         how_paying: how_paying,
         pickup_location: pickup_location,
         need_passphrase: need_passphrase,
         purchased_cards: purchased_cards,
         total_cost: totalCost()
-      }
+      })
 		});
-    */
-
   }
 </script>
 
@@ -176,318 +171,321 @@
 
 
 {#if errors.length > 0}
-  <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
-    <p class="text-lg font-bold">Please fix the following issues with your form:</p>
-    <ul class="list-disc p-2 ml-6">
-    {#each errors as error}
-      <li>{error}</li>
-    {/each}
-    </ul>
+  <div transition:fade={{ delay: 250, duration: 300 }}>
+    <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
+      <p class="text-lg font-bold">Please fix the following issues with your form:</p>
+      <ul class="list-disc p-2 ml-6">
+      {#each errors as error}
+        <li>{error}</li>
+      {/each}
+      </ul>
+    </div>
   </div>
-  {/if}
+{/if}
 
-  {#if submitted}
+{#if submitted}
+<div transition:fade={{ delay: 250, duration: 300 }}>
   <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
-    <p class="text-lg font-bold">Thank you for submitted your shopping cart request, it has been sent successfully. Please see your email for a
+    <p class="text-lg font-bold">Thank you for submitting your shopping card request, it has been sent successfully. Please see your email for a
       confirmation.
     </p>
   </div>
-  {:else}
-<form class="mt-6">
-  <div class="space-y-6">
-    <div
-      class="grid grid-cols-1 gap-x-8 gap-y-10 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 rounded bg-white"
-    >
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-gray-900">
-          Your Details
-        </h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">
-          Please fill out these details carefully to ensure an accurate ordering process.
-        </p>
-      </div>
-
-      <div
-        class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2"
-      >
-        <div class="sm:col-span-4">
-          <label
-            for="website"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >Full Name</label
-          >
-          <div class="mt-2">
-            <div
-              class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
-            >
-              <input
-                type="text"
-                name="name"
-                id="name"
-                bind:value={name}
-                class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-4">
-          <label
-            for="email"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >Email address</label
-          >
-          <div class="mt-2">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              bind:value={email}
-              autocomplete="email"
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-full">
-          <label
-            for="how_paying"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >How will be paying for the gift cards?</label
-          >
-          <div class="mt-2">
-            <select
-              id="how_paying"
-              name="how_paying"
-              bind:value={how_paying}
-              autocomplete="etransfer"
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-            >
-              <option value="etransfer">Interact e-Transfer</option>
-              <option value="cash">Cash</option>
-              <option value="cheque">Cheque</option>
-            </select>
-          </div>
-          <p class="mt-3 text-sm leading-6 text-gray-600">
-            For Cash and Cheque payment options, please bring with you when
-            picking up your shopping cards. For e-Transfer, please e-transfer
-            the funds before coming to pick up your cards.
-          </p>
-        </div>
-
-        {#if how_paying === "etransfer"}
-        <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
-        <fieldset>
-          <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
-          <div class="mt-6 space-y-6">
-          <div class="flex items-center gap-x-3">
-            <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-            <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
-          </div>
-          </div>
-
-          <div class="mt-4">
-            <label
-              for="phone-number"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >Phone Number</label
-            >
-            <div class="mt-2">
-              <input
-              id="phone-number"
-              name="phone_number"
-              type="text"
-              bind:value={phone_number}
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-            </div>
-            <p class="mt-3 text-sm leading-6 text-gray-600">
-              We will call you at this number with the required passphrase for e-Transfer. Please do not send your e-Transfer
-              until you receive the passphrase.
+  </div>
+{:else}
+  <div transition:fade={{ delay: 250, duration: 300 }}>
+    <form class="mt-6">
+      <div class="space-y-6">
+        <div
+          class="grid grid-cols-1 gap-x-8 gap-y-10 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 rounded bg-white"
+        >
+          <div>
+            <h2 class="text-base font-semibold leading-7 text-gray-900">
+              Your Details
+            </h2>
+            <p class="mt-1 text-sm leading-6 text-gray-600">
+              Please fill out these details carefully to ensure an accurate ordering process.
             </p>
           </div>
-          </fieldset>
-          </div>
-        {/if}
 
-        <div class="col-span-full">
-          <label
-            for="pickup-location"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >Pick-up location & time</label
+          <div
+            class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2"
           >
-          <div class="mt-2">
-            <select
-              id="pickup-location"
-              name="pickup-location"
-              bind:value={pickup_location}
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-            >
-              <option value="">Choose Pickup Location and Time</option>
-              <option value="Saturday 4:30pm Mass">Saturday 4:30pm Mass</option>
-              <option value="Sunday 9am Mass">Sunday 9:00am Mass</option>
-              <option value="Sunday 11am Mass">Sunday 11:00am Mass</option>
-              <option value="Earl Coatta's House">Earl Coatta's House</option>
-            </select>
-          </div>
-          <p class="mt-3 text-sm leading-6 text-gray-600">
-            Please wait to recieve confirmation of your order before coming to
-            pick-up shopping cards at your preferred time.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="grid grid-cols-1 gap-x-8 gap-y-10 shadow bg-white rounded p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
-    >
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-gray-900">
-          Shopping Card Selection
-        </h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">
-          Choose the Shopping Cards for your order. Most of these cards are in inventory but some
-          are only available upon request. You will be notified if any cards are not
-          in stock after you submit your order.
-        </p>
-      </div>
-
-      <div
-        class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-4 md:col-span-2"
-      >
-        {#each categories as category}
-          <div class="sm:col-span-2">
-            <p class="text-2xl font-bold text-blue-600 uppercase mb-2">
-              {category.name}
-            </p>
-
-            <div class="grid grid-cols-1 gap-y-3">
-              {#each shopping_cards.filter((e) => e.category === category.id) as shopping_card, i}
-                <div class="relative flex gap-x-3">
-                  <div class="flex h-6 items-center">
-                    <input
-                      bind:checked={shopping_card.selected}
-                      id="shopping_card_{shopping_card.id}"
-                      name="shopping_card_{shopping_card.name}"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                  </div>
-                  <div class="text-sm leading-6">
-                    <label
-                      for="shopping_card_{shopping_card.id}"
-                      class="font-medium text-gray-900"
-                    >
-                      <span class="text-base">
-                        {shopping_card.name}
-                      </span>
-                      <span class="text-gray-600">
-                        ({shopping_card.cards.join(", ")})
-                      </span>
-                    </label>
-                    {#if shopping_card.selected}
-                      <div
-                        class="border border-gray-50 rounded shadow-lg p-2 mb-4"
-                      >
-                        <p class="italic py-2 mb-1 text-sm">
-                          Enter the number of cards you want
-                        </p>
-                        <div class="py-2 flex flex-wrap gap-x-3 gap-y-4">
-                          {#each shopping_card.cards as card, cardIdx}
-                            <div>
-                              <span class="text-sm text-gray-700 mr-2"
-                                >{card}</span
-                              >
-                              <input
-                                on:change={(e) =>
-                                  updatePurchasedCard(
-                                    `${shopping_card.id}-${cardIdx}`,
-                                    shopping_card.name,
-                                    card,
-                                    e.target.value
-                                  )}
-                                type="number"
-                                name="{shopping_card.name}_{card}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="0"
-                                min="0"
-                                max="10"
-                              />
-                            </div>
-                          {/each}
-                        </div>
-                      </div>
-                    {/if}
-                  </div>
+            <div class="sm:col-span-4">
+              <label
+                for="website"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Full Name</label
+              >
+              <div class="mt-2">
+                <div
+                  class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+                >
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    bind:value={name}
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
                 </div>
-              {/each}
+              </div>
+            </div>
+
+            <div class="sm:col-span-4">
+              <label
+                for="email"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Email address</label
+              >
+              <div class="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  bind:value={email}
+                  autocomplete="email"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="col-span-full">
+              <label
+                for="how_paying"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >How will be paying for the gift cards?</label
+              >
+              <div class="mt-2">
+                <select
+                  id="how_paying"
+                  name="how_paying"
+                  bind:value={how_paying}
+                  autocomplete="etransfer"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option value="etransfer">Interact e-Transfer</option>
+                  <option value="cash">Cash</option>
+                  <option value="cheque">Cheque</option>
+                </select>
+              </div>
+              <p class="mt-3 text-sm leading-6 text-gray-600">
+                For Cash and Cheque payment options, please bring with you when
+                picking up your shopping cards. For e-Transfer, please e-transfer
+                the funds before coming to pick up your cards.
+              </p>
+            </div>
+
+            {#if how_paying === "etransfer"}
+            <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
+            <fieldset>
+              <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
+              <div class="mt-6 space-y-6">
+              <div class="flex items-center gap-x-3">
+                <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
+              </div>
+              </div>
+
+              <div class="mt-4">
+                <label
+                  for="phone-number"
+                  class="block text-sm font-medium leading-6 text-gray-900"
+                  >Phone Number</label
+                >
+                <div class="mt-2">
+                  <input
+                  id="phone-number"
+                  name="phone_number"
+                  type="text"
+                  bind:value={phone_number}
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+                </div>
+                <p class="mt-3 text-sm leading-6 text-gray-600">
+                  We will call you at this number with the required passphrase for e-Transfer. Please do not send your e-Transfer
+                  until you receive the passphrase.
+                </p>
+              </div>
+              </fieldset>
+              </div>
+            {/if}
+
+            <div class="col-span-full">
+              <label
+                for="pickup-location"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Pick-up location & time</label
+              >
+              <div class="mt-2">
+                <select
+                  id="pickup-location"
+                  name="pickup-location"
+                  bind:value={pickup_location}
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option value="">Choose Pickup Location and Time</option>
+                  <option value="Saturday 4:30pm Mass">Saturday 4:30pm Mass</option>
+                  <option value="Sunday 9am Mass">Sunday 9:00am Mass</option>
+                  <option value="Sunday 11am Mass">Sunday 11:00am Mass</option>
+                  <option value="Earl Coatta's House">Earl Coatta's House</option>
+                </select>
+              </div>
+              <p class="mt-3 text-sm leading-6 text-gray-600">
+                Please wait to recieve confirmation of your order before coming to
+                pick-up shopping cards at your preferred time.
+              </p>
             </div>
           </div>
-        {/each}
-      </div>
-    </div>
+        </div>
 
-    <div
-      class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
-    >
-      <div>
-        <h2 class="text-lg font-semibold leading-7 text-gray-900">
-          Order Summary
-        </h2>
-      </div>
+        <div
+          class="grid grid-cols-1 gap-x-8 gap-y-10 shadow bg-white rounded p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
+        >
+          <div>
+            <h2 class="text-base font-semibold leading-7 text-gray-900">
+              Shopping Card Selection
+            </h2>
+            <p class="mt-1 text-sm leading-6 text-gray-600">
+              Choose the Shopping Cards for your order. Most of these cards are in inventory but some
+              are only available upon request. You will be notified if any cards are not
+              in stock after you submit your order.
+            </p>
+          </div>
 
-      <div
-        class="max-w-2xl space-y-10 md:col-span-2 bg-white shadow rounded py-8 px-6"
-      >
-        {#if purchased_cards.length > 0}
-          <h3 class="text-xl font-semibold text-gray-800">
-            Your Selected Cards
-          </h3>
-          <div class="w-full grid grid-cols-2 py-2 mt-6 gap-y-2">
-            {#each purchased_cards as purchased_card}
-              <div class="text-lg text-gray-600">
-                <span class="text-gray-800 font-semibold"
-                  >{purchased_card.name}</span
-                >: {purchased_card.value}
-                x {purchased_card.quantity}
-              </div>
-              <div class="text-xl font-bold text-right">
-                ${calculateSubtotal(purchased_card)}
+          <div
+            class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-4 md:col-span-2"
+          >
+            {#each categories as category}
+              <div class="sm:col-span-2">
+                <p class="text-2xl font-bold text-blue-600 uppercase mb-2">
+                  {category.name}
+                </p>
+
+                <div class="grid grid-cols-1 gap-y-3">
+                  {#each shopping_cards.filter((e) => e.category === category.id) as shopping_card, i}
+                    <div class="relative flex gap-x-3">
+                      <div class="flex h-6 items-center">
+                        <input
+                          bind:checked={shopping_card.selected}
+                          id="shopping_card_{shopping_card.id}"
+                          name="shopping_card_{shopping_card.name}"
+                          type="checkbox"
+                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        />
+                      </div>
+                      <div class="text-sm leading-6">
+                        <label
+                          for="shopping_card_{shopping_card.id}"
+                          class="font-medium text-gray-900"
+                        >
+                          <span class="text-base">
+                            {shopping_card.name}
+                          </span>
+                          <span class="text-gray-600">
+                            ({shopping_card.cards.join(", ")})
+                          </span>
+                        </label>
+                        {#if shopping_card.selected}
+                          <div
+                            class="border border-gray-50 rounded shadow-lg p-2 mb-4"
+                          >
+                            <p class="italic py-2 mb-1 text-sm">
+                              Enter the number of cards you want
+                            </p>
+                            <div class="py-2 flex flex-wrap gap-x-3 gap-y-4">
+                              {#each shopping_card.cards as card, cardIdx}
+                                <div>
+                                  <span class="text-sm text-gray-700 mr-2"
+                                    >{card}</span
+                                  >
+                                  <input
+                                    on:change={(e) =>
+                                      updatePurchasedCard(
+                                        `${shopping_card.id}-${cardIdx}`,
+                                        shopping_card.name,
+                                        card,
+                                        e.target.value
+                                      )}
+                                    type="number"
+                                    name="{shopping_card.name}_{card}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="0"
+                                    min="0"
+                                    max="10"
+                                  />
+                                </div>
+                              {/each}
+                            </div>
+                          </div>
+                        {/if}
+                      </div>
+                    </div>
+                  {/each}
+                </div>
               </div>
             {/each}
           </div>
-          {#key purchased_cards}
-            <div
-              class="flex justify-between border-t border-gray-300 py-2 mt-6"
-            >
-              <div class="text-lg font-bold">TOTAL AMOUNT</div>
-              <div class="text-xl font-bold">
-                ${totalCost()}
+        </div>
+
+        <div
+          class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
+        >
+          <div>
+            <h2 class="text-lg font-semibold leading-7 text-gray-900">
+              Order Summary
+            </h2>
+          </div>
+
+          <div
+            class="max-w-2xl space-y-10 md:col-span-2 bg-white shadow rounded py-8 px-6"
+          >
+            {#if purchased_cards.length > 0}
+              <h3 class="text-xl font-semibold text-gray-800">
+                Your Selected Cards
+              </h3>
+              <div class="w-full grid grid-cols-2 py-2 mt-6 gap-y-2">
+                {#each purchased_cards as purchased_card}
+                  <div class="text-lg text-gray-600">
+                    <span class="text-gray-800 font-semibold"
+                      >{purchased_card.name}</span
+                    >: {purchased_card.value}
+                    x {purchased_card.quantity}
+                  </div>
+                  <div class="text-xl font-bold text-right">
+                    ${calculateSubtotal(purchased_card)}
+                  </div>
+                {/each}
               </div>
-            </div>
-          {/key}
-        {:else}
-          <p class="text-lg italic">
-            Your shopping card order will be summarized here as you select
-            cards.
-          </p>
-        {/if}
+              {#key purchased_cards}
+                <div
+                  class="flex justify-between border-t border-gray-300 py-2 mt-6"
+                >
+                  <div class="text-lg font-bold">TOTAL AMOUNT</div>
+                  <div class="text-xl font-bold">
+                    ${totalCost()}
+                  </div>
+                </div>
+              {/key}
+            {:else}
+              <p class="text-lg italic">
+                Your shopping card order will be summarized here as you select
+                cards.
+              </p>
+            {/if}
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="mt-6 flex items-center justify-end gap-x-6">
+        <button
+          type="submit"
+          on:click={submitOrder}
+          class="rounded-md bg-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >SUBMIT ORDER</button
+        >
+      </div>
+    </form>
   </div>
-
-
-
-
-  <div class="mt-6 flex items-center justify-end gap-x-6">
-    <button
-      type="submit"
-      on:click={submitOrder}
-      class="rounded-md bg-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >SUBMIT ORDER</button
-    >
-  </div>
-</form>
 {/if}
 
 <style lang="postcss">
