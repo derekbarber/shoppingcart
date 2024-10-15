@@ -35,7 +35,7 @@ export async function POST({ request }) {
 
   order_html += `<p><strong>TOTAL COST: $${data.total_cost}</strong></p>`
 
-  const { result1, error1 } = resend.emails.send({
+  const { result1, error1 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
     to: 'derekbarber@gmail.com',
     //to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
@@ -70,7 +70,7 @@ export async function POST({ request }) {
   confirmation_html += `<p>Don't hesitate to reach out to Earl Coatte at ecoatta@telus.net if you have any questions or concerns.</p>`
   confirmation_html += `<p>Thank you</p>`
 
-  const { result2, error2 } = resend.emails.send({
+  const { result2, error2 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
     to: data.email,
     subject: 'Precious Blood Parish - Shopping Card Order Confirmation',
