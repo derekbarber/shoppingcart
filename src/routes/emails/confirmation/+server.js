@@ -61,7 +61,6 @@ export async function POST({ request }) {
   confirmation_html += `<p>Don't hesitate to reach out to Earl Coatte at ecoatta@telus.net if you have any questions or concerns.</p>`
   confirmation_html += `<p>Thank you</p>`
 
-
   resend.emails.send({
     from: 'cards@pbcards.ca',
     to: data.email,
