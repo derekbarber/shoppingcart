@@ -10,7 +10,7 @@ export async function POST({ request }) {
 
   const data = await request.json();
 
-	//console.log(data);
+	console.log(data);
 
   let order_html = `<p><strong>The following order was placed for Shopping Cards</strong></p>\
     <p>Details of Purchase:</p>
@@ -22,6 +22,8 @@ export async function POST({ request }) {
 
   if (data.how_paying == 'etransfer' && data.need_passphrase) {
     order_html += `<p><strong>Do they need the passphrase?</strong> YES</p>`
+  } else if (data.how_paying == 'etransfer') {
+    order_html += `<p>Do they need the passphrase?</strong> NO</p>`
   }
 
   order_html += `<p><strong>Shopping Cards Requested:</strong></p>`
@@ -35,7 +37,8 @@ export async function POST({ request }) {
 
   const { result1, error1 } = resend.emails.send({
     from: 'cards@pbcards.ca',
-    to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
+    to: 'derekbarber@gmail.com',
+    //to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
     subject: 'Precious Blood Parish - Shopping Card Order Received',
     html: order_html
   });

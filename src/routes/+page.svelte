@@ -276,40 +276,41 @@
             </div>
 
             {#if how_paying === "etransfer"}
-            <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
-            <fieldset>
-              <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
-              <div class="mt-6 space-y-6">
-              <div class="flex items-center gap-x-3">
-                <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
+              <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
+                <fieldset>
+                  <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
+                  <div class="mt-6 space-y-6">
+                    <div class="flex items-center gap-x-3">
+                      <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                      <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
+                    </div>
+                  </div>
+                </fieldset>
               </div>
-              </div>
+            {/if}
 
-              <div class="mt-4">
-                <label
-                  for="phone-number"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >Phone Number</label
-                >
-                <div class="mt-2">
-                  <input
-                  id="phone-number"
-                  name="phone_number"
-                  type="text"
-                  bind:value={phone_number}
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                </div>
+            <div class="col-span-full">
+              <label
+                for="phone-number"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Phone Number</label
+              >
+              <div class="mt-2">
+                <input
+                id="phone-number"
+                name="phone_number"
+                type="text"
+                bind:value={phone_number}
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              </div>
+              {#if how_paying === "etransfer" && need_passphrase}
                 <p class="mt-3 text-sm leading-6 text-gray-600">
                   We will call you at this number with the required passphrase for e-Transfer. Please do not send your e-Transfer
                   until you receive the passphrase.
                 </p>
-              </div>
-              </fieldset>
-              </div>
-            {/if}
-
+              {/if}
+            </div>
             <div class="col-span-full">
               <label
                 for="pickup-location"
