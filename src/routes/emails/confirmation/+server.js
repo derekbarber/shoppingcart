@@ -33,12 +33,18 @@ export async function POST({ request }) {
 
   order_html += `<p><strong>TOTAL COST: $${data.total_cost}</strong></p>`
 
-  resend.emails.send({
+  const { data, error } = resend.emails.send({
     from: 'cards@pbcards.ca',
     to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
     subject: 'Precious Blood Parish - Shopping Card Order Received',
     html: order_html
   });
+
+  if (error) {
+    console.error({ error });
+  }
+
+  console.log({ data });
 
   let confirmation_html = `<p><strong>Thank you for placing an order for Shopping Cards. We have received your order successfully.</strong></p>`
   confirmation_html += `<p><strong>You Requested the following Shopping Cards</strong></p>`
@@ -61,12 +67,18 @@ export async function POST({ request }) {
   confirmation_html += `<p>Don't hesitate to reach out to Earl Coatte at ecoatta@telus.net if you have any questions or concerns.</p>`
   confirmation_html += `<p>Thank you</p>`
 
-  resend.emails.send({
+  const { data, error } = resend.emails.send({
     from: 'cards@pbcards.ca',
     to: data.email,
     subject: 'Precious Blood Parish - Shopping Card Order Confirmation',
     html: confirmation_html
   });
+
+  if (error) {
+    console.error({ error });
+  }
+
+  console.log({ data });
 
   return new Response(JSON.stringify({ message: "Success" }), { status: 200 })
 };
