@@ -5,11 +5,7 @@ const resend = new Resend('re_caxSRCyD_53aJRtXz68CKmATZdtcXwehk');
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 
-  //console.log("REQUEST!!!!")
-  //console.log(event.request)
-
   const data = await request.json();
-
 	console.log(data);
 
   let order_html = `<p><strong>The following order was placed for Shopping Cards</strong></p>\

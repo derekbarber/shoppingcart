@@ -328,6 +328,7 @@
                   <option value="Saturday 4:30pm Mass">Saturday 4:30pm Mass</option>
                   <option value="Sunday 9am Mass">Sunday 9:00am Mass</option>
                   <option value="Sunday 11am Mass">Sunday 11:00am Mass</option>
+                  <option value="Parish Office">Parish Office</option>
                   <option value="Earl Coatta's House">Earl Coatta's House</option>
                 </select>
               </div>
