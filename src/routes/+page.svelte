@@ -148,21 +148,19 @@
     <ul class="list-disc list-inside mt-4 ml-2">
       <li class="py-2">
         <span class="font-bold text-lg mr-2">STEP 1: </span>
-        Fill out the form below, selecting the gift cards you want along with the
-        quantity of cards.
+        Fill out the form below, entering your details and selecting the gift cards you want along with the
+        quantity for each.
       </li>
-      <li class="py-2 text-lg mr-2">
-        <span class="font-bold">STEP 2: </span>
-        You will receive an email confirmation with your order details. At this point
-        you may send an e-Transfer to pay for your cards.
+      <li class="py-2">
+        <span class="font-bold text-lg mr-2">STEP 2: </span>
+        You will immediately receive an email confirmation with your order details.
       </li>
-      <li class="py-2 text-lg mr-2">
-        <span class="font-bold">STEP 3: </span>
-        Once your order is fufilled, you will receive a second email with pick-up
-        details.
+      <li class="py-2">
+        <span class="font-bold text-lg mr-2">STEP 3: </span>
+        Once your order is fufilled, you will receive a second email confirming your pickup details.
       </li>
-      <li class="py-2 text-lg mr-2">
-        <span class="font-bold">STEP 4: </span>
+      <li class="py-2">
+        <span class="font-bold text-lg mr-2">STEP 4: </span>
         Pick-up your cards and go shopping!
       </li>
     </ul>
@@ -186,8 +184,11 @@
 {#if submitted}
 <div transition:fade={{ delay: 250, duration: 300 }}>
   <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
-    <p class="text-lg font-bold">Thank you for submitting your shopping card request, it has been sent successfully. Please see your email for a
-      confirmation.
+    <p class="text-lg font-bold mt-6">Thank you for submitting your shopping card request, it has been sent successfully!
+    </p>
+    <p class="text-lg mt-6">
+       Please see your email for a confirmation from <strong>cards@pbcards.ca</strong>. Note: <em>If you don't recieve an
+        email within a few minutes please check your SPAM folder and be sure to whitelist emails from cards@pbcards.ca.</em>
     </p>
   </div>
   </div>
@@ -271,15 +272,19 @@
               <p class="mt-3 text-sm leading-6 text-gray-600">
                 For Cash and Cheque payment options, please bring with you when
                 picking up your shopping cards. For e-Transfer, please e-transfer
-                the funds before coming to pick up your cards.
+                the funds to ecoatta@telus.net before coming to pick up your cards.
               </p>
             </div>
 
             {#if how_paying === "etransfer"}
-              <div class="col-span-full p-4 border border-gray-200 bg-gray-50">
+              <div class="col-span-full p-4 border border-gray-200 bg-blue-50">
                 <fieldset>
                   <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
-                  <div class="mt-6 space-y-6">
+                  <div class="mt-4 space-y-4">
+                    <div class="text-sm text-blue-800">
+                      When sending an e-transfer please send to the email <strong>ecoatta@telus.net</strong> and be sure to only use the passphrase you were given. If you
+                      don't yet know the passphrase please click the follow checkbox and we will call you to share it.
+                    </div>
                     <div class="flex items-center gap-x-3">
                       <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                       <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
