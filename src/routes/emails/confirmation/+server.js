@@ -34,6 +34,7 @@ export async function POST({ request }) {
   const { result1, error1 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
     to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
+    replyTo: data.email,
     //to: ['derekbarber@gmail.com'],
     subject: 'Precious Blood Parish - Shopping Card Order Received',
     html: order_html
@@ -57,7 +58,7 @@ export async function POST({ request }) {
 
   if (data.how_paying == 'etransfer' && data.need_passphrase) {
     confirmation_html += `<p style="font-size: 14px;">As you specified payment via e-transfer, you can send the e-transfer to email address <strong>ecoatta@telus.net</strong>. `
-    confirmation_html += `Also, as you have requested the passphrase Earl Coatta will call you shortly and share that with you. To help facilitate order processing `
+    confirmation_html += `Also, as you have requested the passphrase Earl Coatta will contact you shortly at your email or phone number and share that with you. To help facilitate order processing `
     confirmation_html += `it is important that you only use the given passphase and not make up your own.</p>`
   } else if (data.how_paying == 'etransfer') {
     confirmation_html += `<p style="font-size: 14px;">As you specified payment via e-transfer, you can send the e-transfer to email address <strong>ecoatta@telus.net</strong>. `
@@ -76,6 +77,7 @@ export async function POST({ request }) {
   const { result2, error2 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
     to: data.email,
+    replyTo: 'ecoatta@telus.net',
     subject: 'Precious Blood Parish - Shopping Card Order Confirmation',
     html: confirmation_html
   });

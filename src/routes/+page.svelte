@@ -86,9 +86,6 @@
     if (email.length == 0 || !validateEmail(email)) {
       errors.push("Please enter a valid email")
     }
-    if (phone_number.length <  10) {
-      errors.push("Please enter a full 10-digit phone number with area code")
-    }
     if (pickup_location.length == 0) {
       errors.push("Please select your pickup time and location")
     }
@@ -283,11 +280,11 @@
                   <div class="mt-4 space-y-4">
                     <div class="text-sm text-blue-800">
                       When sending an e-transfer please send to the email <strong>ecoatta@telus.net</strong> and be sure to only use the passphrase you were given. If you
-                      don't yet know the passphrase please click the follow checkbox and we will call you to share it.
+                      don't yet know the passphrase please click the follow checkbox and we will contact you via phone or email to share it.
                     </div>
                     <div class="flex items-center gap-x-3">
                       <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                      <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please call me.</label>
+                      <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please contact me to share it.</label>
                     </div>
                   </div>
                 </fieldset>
@@ -311,7 +308,7 @@
               </div>
               {#if how_paying === "etransfer" && need_passphrase}
                 <p class="mt-3 text-sm leading-6 text-gray-600">
-                  We will call you at this number with the required passphrase for e-Transfer. Please do not send your e-Transfer
+                  We will call you at this number or email you at your email address with the required passphrase for e-Transfer. Please do not send your e-Transfer
                   until you receive the passphrase.
                 </p>
               {/if}
