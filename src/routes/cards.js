@@ -101,14 +101,14 @@ export let cards = [
     name: "Tim Hortons",
     cards: ["$5", "$10", "$25", "$50"],
   },
-
+/*
   {
     id: 27,
     category: 2,
     selected: false,
     name: "Domino's Pizza",
     cards: ["$25"],
-  },
+  },*/
   {
     id: 27,
     category: 2,
