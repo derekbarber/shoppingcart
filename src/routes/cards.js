@@ -56,8 +56,8 @@ export let cards = [
     cards: ["$25", "$50", "$100", "$250"],
   },
   { id: 7, category: 1, selected: false, name: "T&T Market", cards: ["$50"] },
-  { id: 8, category: 1, selected: false, name: "By Low", cards: ["$25","$50", "$100"] },
-  { id: 9, category: 1, selected: false, name: "Nesters", cards: ["$25","$50", "$100"] },
+  { id: 8, category: 1, selected: false, name: "By Low", cards: ["$25", "$50", "$100"] },
+  { id: 9, category: 1, selected: false, name: "Nesters", cards: ["$25", "$50", "$100"] },
   /* Restaurants */
   {
     id: 21,
@@ -101,14 +101,14 @@ export let cards = [
     name: "Tim Hortons",
     cards: ["$5", "$10", "$25", "$50"],
   },
-/*
-  {
-    id: 27,
-    category: 2,
-    selected: false,
-    name: "Domino's Pizza",
-    cards: ["$25"],
-  },*/
+  /*
+    {
+      id: 27,
+      category: 2,
+      selected: false,
+      name: "Domino's Pizza",
+      cards: ["$25"],
+    },*/
   {
     id: 27,
     category: 2,
@@ -158,15 +158,9 @@ export let cards = [
     name: "White Spot",
     cards: ["$25", "$50"],
   },
-  {
-    id: 34,
-    category: 2,
-    selected: false,
-    name: "Triple O's",
-    cards: ["$25"],
-  },
 
   /*** CLOTHING / DEPT. STORES */
+  /*
   {
     id: 41,
     category: 3,
@@ -174,6 +168,7 @@ export let cards = [
     name: "Hudson Bay / Home Outfitters",
     cards: ["$25", "$50", "$100"],
   },
+  */
   {
     id: 43,
     category: 3,
