@@ -55,7 +55,7 @@ export let cards = [
     name: "Superstore / Extra Foods / No Frills",
     cards: ["$25", "$50", "$100", "$250"],
   },
-  { id: 7, category: 1, selected: false, name: "T&T Market", cards: ["$50"] },
+  /*{ id: 7, category: 1, selected: false, name: "T&T Market", cards: ["$50"] },*/
   { id: 8, category: 1, selected: false, name: "By Low", cards: ["$25", "$50", "$100"] },
   { id: 9, category: 1, selected: false, name: "Nesters", cards: ["$25", "$50", "$100"] },
   /* Restaurants */
@@ -301,13 +301,14 @@ export let cards = [
     name: "Cineplex",
     cards: ["$25", "$50"],
   },
+  /*
   {
     id: 75,
     category: 6,
     selected: false,
     name: "Amazon.ca Digital Cards (not Amazon.com)",
     cards: ["$25", "$50", "$100"],
-  },
+  },*/
   {
     id: 76,
     category: 6,
