@@ -273,6 +273,7 @@ export let cards = [
   },
 
   /***** SPECIALTY STORES */
+  /*
   {
     id: 71,
     category: 6,
@@ -280,6 +281,7 @@ export let cards = [
     name: "Bath and Body Works",
     cards: ["$25"],
   },
+  */
   {
     id: 72,
     category: 6,
@@ -301,14 +303,13 @@ export let cards = [
     name: "Cineplex",
     cards: ["$25", "$50"],
   },
-  /*
   {
     id: 75,
     category: 6,
     selected: false,
     name: "Amazon.ca Digital Cards (not Amazon.com)",
-    cards: ["$25", "$50", "$100"],
-  },*/
+    cards: ["$50", "$100"],
+  },
   {
     id: 76,
     category: 6,
