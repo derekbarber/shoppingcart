@@ -1,20 +1,21 @@
 <script>
   import logo from "$lib/images/pb-logo.jpg";
 
-  import { fade } from 'svelte/transition';
-  import { categories, cards } from './cards.js'
+  import { fade } from "svelte/transition";
+  import { categories, cards } from "./cards.js";
 
-  let name = ""
-  let email = ""
-  let how_paying = "etransfer"
-  let phone_number = ""
-  let need_passphrase = false
-  let pickup_location = ""
+  let name = "";
+  let email = "";
+  let how_paying = "etransfer";
+  let phone_number = "";
+  let need_passphrase = false;
+  let pickup_location = "";
+  let memo = "";
 
-  let submitted = false
+  let submitted = false;
 
-  let errors = []
-  let shopping_cards = cards
+  let errors = [];
+  let shopping_cards = cards;
 
   let purchased_cards = [];
 
@@ -71,41 +72,40 @@
   }
 
   const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
+  };
 
   function validateForm() {
-    errors = []
+    errors = [];
     if (name.length < 3) {
-      errors.push("Please enter a name of at least 3 characters")
+      errors.push("Please enter a name of at least 3 characters");
     }
     if (email.length == 0 || !validateEmail(email)) {
-      errors.push("Please enter a valid email")
+      errors.push("Please enter a valid email");
     }
     if (pickup_location.length == 0) {
-      errors.push("Please select your pickup time and location")
+      errors.push("Please select your pickup time and location");
     }
     if (purchased_cards.length == 0) {
-      errors.push("Please select at least one shopping card")
+      errors.push("Please select at least one shopping card");
     }
   }
 
   function submitOrder() {
-
-    validateForm()
+    validateForm();
 
     if (errors.length > 0) {
-      return false
+      return false;
     }
 
-    submitted = true
+    submitted = true;
 
-    fetch('/emails/confirmation', {
-			method: 'POST',
+    fetch("/emails/confirmation", {
+      method: "POST",
       body: JSON.stringify({
         name: name,
         email: email,
@@ -113,10 +113,11 @@
         how_paying: how_paying,
         pickup_location: pickup_location,
         need_passphrase: need_passphrase,
+        memo: memo,
         purchased_cards: purchased_cards,
-        total_cost: totalCost()
-      })
-		});
+        total_cost: totalCost(),
+      }),
+    });
   }
 </script>
 
@@ -145,8 +146,8 @@
     <ul class="list-disc list-inside mt-4 ml-2">
       <li class="py-2">
         <span class="font-bold text-lg mr-2">STEP 1: </span>
-        Fill out the form below, entering your details and selecting the gift cards you want along with the
-        quantity for each.
+        Fill out the form below, entering your details and selecting the gift cards
+        you want along with the quantity for each.
       </li>
       <li class="py-2">
         <span class="font-bold text-lg mr-2">STEP 2: </span>
@@ -154,7 +155,8 @@
       </li>
       <li class="py-2">
         <span class="font-bold text-lg mr-2">STEP 3: </span>
-        Once your order is fufilled, you will receive a second email confirming your pickup details.
+        Once your order is fufilled, you will receive a second email confirming your
+        pickup details.
       </li>
       <li class="py-2">
         <span class="font-bold text-lg mr-2">STEP 4: </span>
@@ -164,30 +166,38 @@
   </div>
 </div>
 
-
 {#if errors.length > 0}
   <div transition:fade={{ delay: 250, duration: 300 }}>
     <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
-      <p class="text-lg font-bold">Please fix the following issues with your form:</p>
+      <p class="text-lg font-bold">
+        Please fix the following issues with your form:
+      </p>
       <ul class="list-disc p-2 ml-6">
-      {#each errors as error}
-        <li>{error}</li>
-      {/each}
+        {#each errors as error}
+          <li>{error}</li>
+        {/each}
       </ul>
     </div>
   </div>
 {/if}
 
 {#if submitted}
-<div transition:fade={{ delay: 250, duration: 300 }}>
-  <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
-    <p class="text-lg font-bold mt-6">Thank you for submitting your shopping card request, it has been sent successfully!
-    </p>
-    <p class="text-lg mt-6">
-       Please see your email for a confirmation from <strong>cards@pbcards.ca</strong>. Note: <em>If you don't recieve an
-        email within a few minutes please check your SPAM folder and be sure to whitelist emails from cards@pbcards.ca.</em>
-    </p>
-  </div>
+  <div transition:fade={{ delay: 250, duration: 300 }}>
+    <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
+      <p class="text-lg font-bold mt-6">
+        Thank you for submitting your shopping card request, it has been sent
+        successfully!
+      </p>
+      <p class="text-lg mt-6">
+        Please see your email for a confirmation from <strong
+          >cards@pbcards.ca</strong
+        >. Note:
+        <em
+          >If you don't recieve an email within a few minutes please check your
+          SPAM folder and be sure to whitelist emails from cards@pbcards.ca.</em
+        >
+      </p>
+    </div>
   </div>
 {:else}
   <div transition:fade={{ delay: 250, duration: 300 }}>
@@ -201,7 +211,8 @@
               Your Details
             </h2>
             <p class="mt-1 text-sm leading-6 text-gray-600">
-              Please fill out these details carefully to ensure an accurate ordering process.
+              Please fill out these details carefully to ensure an accurate
+              ordering process.
             </p>
           </div>
 
@@ -268,23 +279,40 @@
               </div>
               <p class="mt-3 text-sm leading-6 text-gray-600">
                 For Cash and Cheque payment options, please bring with you when
-                picking up your shopping cards. For e-Transfer, please e-transfer
-                the funds to ecoatta@telus.net before coming to pick up your cards.
+                picking up your shopping cards. For e-Transfer, please
+                e-transfer the funds to ecoatta@telus.net before coming to pick
+                up your cards.
               </p>
             </div>
 
             {#if how_paying === "etransfer"}
               <div class="col-span-full p-4 border border-gray-200 bg-blue-50">
                 <fieldset>
-                  <legend class="text-sm font-semibold leading-6 text-gray-900">Interact e-Transfer Passphrase</legend>
+                  <legend class="text-sm font-semibold leading-6 text-gray-900"
+                    >Interact e-Transfer Passphrase</legend
+                  >
                   <div class="mt-4 space-y-4">
                     <div class="text-sm text-blue-800">
-                      When sending an e-transfer please send to the email <strong>ecoatta@telus.net</strong> and be sure to only use the passphrase you were given. If you
-                      don't yet know the passphrase please click the follow checkbox and we will contact you via phone or email to share it.
+                      When sending an e-transfer please send to the email <strong
+                        >ecoatta@telus.net</strong
+                      > and be sure to only use the passphrase you were given. If
+                      you don't yet know the passphrase please click the follow checkbox
+                      and we will contact you via phone or email to share it.
                     </div>
                     <div class="flex items-center gap-x-3">
-                      <input id="need-password" bind:checked={need_passphrase} name="need-password" type="checkbox" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                      <label for="need-password" class="block text-sm font-medium leading-6 text-gray-900">I need the passphrase for eTransfer, please contact me to share it.</label>
+                      <input
+                        id="need-password"
+                        bind:checked={need_passphrase}
+                        name="need-password"
+                        type="checkbox"
+                        class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                      <label
+                        for="need-password"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >I need the passphrase for eTransfer, please contact me
+                        to share it.</label
+                      >
                     </div>
                   </div>
                 </fieldset>
@@ -299,17 +327,18 @@
               >
               <div class="mt-2">
                 <input
-                id="phone-number"
-                name="phone_number"
-                type="text"
-                bind:value={phone_number}
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+                  id="phone-number"
+                  name="phone_number"
+                  type="text"
+                  bind:value={phone_number}
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
               </div>
               {#if how_paying === "etransfer" && need_passphrase}
                 <p class="mt-3 text-sm leading-6 text-gray-600">
-                  We will call you at this number or email you at your email address with the required passphrase for e-Transfer. Please do not send your e-Transfer
-                  until you receive the passphrase.
+                  We will call you at this number or email you at your email
+                  address with the required passphrase for e-Transfer. Please do
+                  not send your e-Transfer until you receive the passphrase.
                 </p>
               {/if}
             </div>
@@ -327,17 +356,50 @@
                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Choose Pickup Location and Time</option>
-                  <option value="Saturday 4:30pm Mass">Saturday 4:30pm Mass</option>
+                  <option value="Saturday 4:30pm Mass"
+                    >Saturday 4:30pm Mass</option
+                  >
                   <option value="Sunday 9am Mass">Sunday 9:00am Mass</option>
                   <option value="Sunday 11am Mass">Sunday 11:00am Mass</option>
                   <option value="Parish Office">Parish Office</option>
-                  <option value="Earl Coatta's House">Earl Coatta's House</option>
+                  <option value="Earl Coatta's House"
+                    >Earl Coatta's House</option
+                  >
+                  <option value="Custom Pickup Request"
+                    >Custom Pickup Request (Memo Field)</option
+                  >
                 </select>
               </div>
               <p class="mt-3 text-sm leading-6 text-gray-600">
-                Please wait to recieve confirmation of your order before coming to
-                pick-up shopping cards at your preferred time.
+                Please wait to recieve confirmation of your order before coming
+                to pick-up shopping cards at your preferred time.
+                {#if pickup_location === "Custom Pickup Request"}
+                  <span class="text-red-800 font-bold"
+                    >Please enter your custom pickup request in the Memo field.</span
+                  >
+                {/if}
               </p>
+            </div>
+            <div class="sm:col-span-4">
+              <label
+                for="website"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Memo <span class="text-xs font-normal"
+                  >(Enter any extra details or custom pickup requests here)</span
+                ></label
+              >
+              <div class="mt-2">
+                <div
+                  class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+                >
+                  <textarea
+                    name="memo"
+                    id="memo"
+                    bind:value={memo}
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -350,9 +412,10 @@
               Shopping Card Selection
             </h2>
             <p class="mt-1 text-sm leading-6 text-gray-600">
-              Choose the Shopping Cards for your order. Most of these cards are in inventory but some
-              are only available upon request. You will be notified if any cards are not
-              in stock after you submit your order.
+              Choose the Shopping Cards for your order. Most of these cards are
+              in inventory but some are only available upon request. You will be
+              notified if any cards are not in stock after you submit your
+              order.
             </p>
           </div>
 
@@ -408,7 +471,7 @@
                                         `${shopping_card.id}-${cardIdx}`,
                                         shopping_card.name,
                                         card,
-                                        e.target.value
+                                        e.target.value,
                                       )}
                                     type="number"
                                     name="{shopping_card.name}_{card}"

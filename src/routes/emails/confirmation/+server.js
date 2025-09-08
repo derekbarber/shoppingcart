@@ -6,7 +6,7 @@ const resend = new Resend('re_caxSRCyD_53aJRtXz68CKmATZdtcXwehk');
 export async function POST({ request }) {
 
   const data = await request.json();
-	//console.log(data);
+  //console.log(data);
 
   let order_html = `<p style="font-size: 16px;"><strong>The following order was placed for Shopping Cards</strong></p>\
     <p style="font-size: 15px;">Details of Purchase:</p>
@@ -15,6 +15,10 @@ export async function POST({ request }) {
       <strong>Phone Number:</strong> ${data.phone_number}<br>\
       <strong>How Are they Paying:</strong> ${data.how_paying}<br>\
       <strong>Pickup Location:</strong> ${data.pickup_location}</p>`
+
+  if (data.memo.length > 0) {
+    order_html += `<p style="font-size: 14px; line-height: 1.5; margin-left: 10px;"><strong>Memo:</strong> ${data.memo}</p>`
+  }
 
   if (data.how_paying == 'etransfer' && data.need_passphrase) {
     order_html += `<p style="font-size: 15px;"><strong>Do they need the passphrase?</strong> <span style="color: red; font-weight: 600;">YES</span></p>`
@@ -33,9 +37,9 @@ export async function POST({ request }) {
 
   const { result1, error1 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
-    to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
+    //to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
     replyTo: data.email,
-    //to: ['derekbarber@gmail.com'],
+    to: ['derekbarber@gmail.com'],
     subject: 'Precious Blood Parish - Shopping Card Order Received',
     html: order_html
   });
