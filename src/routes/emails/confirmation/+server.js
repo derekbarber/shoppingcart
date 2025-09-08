@@ -37,9 +37,9 @@ export async function POST({ request }) {
 
   const { result1, error1 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
-    //to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
+    to: ['ecoatta@telus.net', 'derekbarber@gmail.com'],
     replyTo: data.email,
-    to: ['derekbarber@gmail.com'],
+    //to: ['derekbarber@gmail.com'],
     subject: 'Precious Blood Parish - Shopping Card Order Received',
     html: order_html
   });
