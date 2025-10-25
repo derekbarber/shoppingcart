@@ -195,7 +195,7 @@ export let cards = [
     category: 3,
     selected: false,
     name: "Walmart",
-    cards: ["$25", "$50", "$100", "$250"],
+    cards: ["$25", "$50", "$100"],
   },
   {
     id: 47,
@@ -320,7 +320,7 @@ export let cards = [
     category: 6,
     selected: false,
     name: "Sephora",
-    cards: ["$50", "$50"],
+    cards: ["$25", "$50"],
   },
   {
     id: 79,
