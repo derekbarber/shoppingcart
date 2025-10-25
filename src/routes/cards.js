@@ -157,14 +157,14 @@ export let cards = [
   /*** CLOTHING / DEPT. STORES */
   {
     id: 41,
-    category: 6,
+    category: 3,
     selected: false,
     name: "Amazon.ca Digital Cards (not Amazon.com)",
     cards: ["$50", "$100"],
   },
   {
     id: 42,
-    category: 6,
+    category: 3,
     selected: false,
     name: "Dollarama",
     cards: ["$25", "$50"],
@@ -222,7 +222,7 @@ export let cards = [
   },
   {
     id: 53,
-    category: 3,
+    category: 4,
     selected: false,
     name: "IKEA",
     cards: ["$50", "$100", "$250"],
@@ -296,7 +296,7 @@ export let cards = [
   },
   {
     id: 75,
-    category: 2,
+    category: 6,
     selected: false,
     name: "DoorDash",
     cards: ["$25", "$50"],
@@ -338,7 +338,7 @@ export let cards = [
   },
   {
     id: 81,
-    category: 3,
+    category: 6,
     selected: false,
     name: "Sport Chek / Atmosphere",
     cards: ["$25", "$50", "$100"],
