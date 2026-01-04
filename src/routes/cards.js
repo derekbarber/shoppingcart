@@ -129,7 +129,7 @@ export let cards = [
     category: 2,
     selected: false,
     name: "Starbucks",
-    cards: ["$5", "$10", "$25", "$50"],
+    cards: ["$10", "$25", "$50"],
   },
   {
     id: 31,
