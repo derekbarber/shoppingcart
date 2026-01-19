@@ -350,11 +350,12 @@ export let cards = [
     name: "Staples",
     cards: ["$25", "$100"],
   },
+  /*
   {
     id: 83,
     category: 6,
     selected: false,
     name: "Toys 'R Us",
     cards: ["$25"],
-  },
+  },*/
 ];
