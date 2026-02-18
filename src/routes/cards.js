@@ -257,6 +257,7 @@ export let cards = [
     name: "Petro Canada",
     cards: ["$25", "$50", "$100"],
   },
+  /*
   {
     id: 63,
     category: 5,
@@ -264,7 +265,7 @@ export let cards = [
     name: "Shell",
     cards: ["$25", "$50", "$100"],
   },
-
+*/
   /***** SPECIALTY STORES */
   {
     id: 71,
