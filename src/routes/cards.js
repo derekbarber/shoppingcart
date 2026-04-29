@@ -42,7 +42,7 @@ export let cards = [
     category: 1,
     selected: false,
     name: "Safeway / Thriftys Foods",
-    cards: ["$25", "$50", "$100", "$200"],
+    cards: ["$25", "$50", "$100"],
   },
   {
     id: 6,
