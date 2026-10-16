@@ -31,5 +31,9 @@
     "nodemailer": "^6.10.1",
     "resend": "^4.8.0",
     "svelte-email": "^0.0.4"
+  },
+  "imports": {
+    "#lib": "./src/lib/index.js",
+    "#lib/*": "./src/lib/*"
   }
 }

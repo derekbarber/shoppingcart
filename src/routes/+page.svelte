@@ -1,5 +1,5 @@
 <script>
-  import logo from "$lib/images/pb-logo.jpg";
+  import logo from "#lib/images/pb-logo.jpg";
 
   import { fade } from "svelte/transition";
   import { categories, cards, preorder_cards } from "./cards.js";
