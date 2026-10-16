@@ -2,7 +2,7 @@
   import logo from "$lib/images/pb-logo.jpg";
 
   import { fade } from "svelte/transition";
-  import { categories, cards } from "./cards.js";
+  import { categories, cards, preorder_cards } from "./cards.js";
 
   let name = "";
   let email = "";
@@ -18,6 +18,7 @@
   let shopping_cards = cards;
 
   let purchased_cards = [];
+  let preordered_cards = [];
 
   function addPurchasedCard(id, name, value, quantity) {
     let purchased_card = {
@@ -28,6 +29,17 @@
     };
 
     purchased_cards = [...purchased_cards, purchased_card];
+  }
+
+  function addPreorderedCard(id, name, value, quantity) {
+    let preordered_card = {
+      id: id,
+      name: name,
+      value: value,
+      quantity: quantity,
+    };
+
+    preordered_cards = [...preordered_cards, preordered_card];
   }
 
   function updatePurchasedCard(id, name, value, quantity) {
@@ -54,6 +66,30 @@
     }
   }
 
+  function updatePreorderedCard(id, name, value, quantity) {
+    if (quantity > 0) {
+      let found_card_index = preordered_cards.findIndex((pc) => pc.id === id);
+
+      if (found_card_index >= 0) {
+        preordered_cards[found_card_index] = {
+          id: id,
+          name: name,
+          value: value,
+          quantity: quantity,
+        };
+        totalCost();
+      } else {
+        addPreorderedCard(id, name, value, quantity);
+      }
+    } else if (quantity <= 0) {
+      let found_card_index = preordered_cards.findIndex((pc) => pc.id === id);
+      if (found_card_index >= 0) {
+        preordered_cards.splice(found_card_index, 1);
+        preordered_cards = preordered_cards;
+      }
+    }
+  }
+
   function calculateSubtotal(card) {
     let amount = card.value.replace(/[^0-9.-]+/g, "");
     return parseInt(amount, 10) * parseInt(card.quantity, 10);
@@ -63,6 +99,17 @@
     //console.log(purchased_cards);
     let total = 0;
     purchased_cards.forEach((pc) => {
+      let amount = pc.value.replace(/[^0-9.-]+/g, "");
+      let subtotal = parseInt(amount, 10) * parseInt(pc.quantity, 10);
+      total += subtotal;
+    });
+
+    return total;
+  }
+
+  function totalPreorderCost() {
+    let total = 0;
+    preordered_cards.forEach((pc) => {
       let amount = pc.value.replace(/[^0-9.-]+/g, "");
       let subtotal = parseInt(amount, 10) * parseInt(pc.quantity, 10);
       total += subtotal;
@@ -115,7 +162,9 @@
         need_passphrase: need_passphrase,
         memo: memo,
         purchased_cards: purchased_cards,
+        preordered_cards: preordered_cards,
         total_cost: totalCost(),
+        total_preorder_cost: totalPreorderCost(),
       }),
     });
   }
@@ -189,13 +238,12 @@
         successfully!
       </p>
       <p class="text-lg mt-6">
-        Please see your email for a confirmation from <strong
-          >cards@pbcards.ca</strong
-        >. Note:
-        <em
-          >If you don't recieve an email within a few minutes please check your
-          SPAM folder and be sure to whitelist emails from cards@pbcards.ca.</em
-        >
+        Please see your email for a confirmation from
+        <strong>cards@pbcards.ca</strong>. Note:
+        <em>
+          If you don't recieve an email within a few minutes please check your
+          SPAM folder and be sure to whitelist emails from cards@pbcards.ca.
+        </em>
       </p>
     </div>
   </div>
@@ -408,14 +456,14 @@
           class="grid grid-cols-1 gap-x-8 gap-y-10 shadow bg-white rounded p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
         >
           <div>
-            <h2 class="text-base font-semibold leading-7 text-gray-900">
+            <h2 class="text-2xl text-green-600 leading-7">IN STOCK</h2>
+            <h2 class="text-xl font-semibold leading-7 text-green-700">
               Shopping Card Selection
             </h2>
             <p class="mt-1 text-sm leading-6 text-gray-600">
-              Choose the Shopping Cards for your order. Most of these cards are
-              in inventory but some are only available upon request. You will be
-              notified if any cards are not in stock after you submit your
-              order.
+              Choose the Shopping Cards for your order. These cards should be
+              available in inventory, however if any cards are not in stock
+              after you submit your order we will notify you.
             </p>
           </div>
 

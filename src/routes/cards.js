@@ -26,7 +26,7 @@ export let categories = [
 ];
 
 export let cards = [
-  { id: 1, category: 1, selected: false, name: "By Low", cards: ["$25", "$50", "$100"] },
+  /*
   {
     id: 2,
     category: 1,
@@ -34,8 +34,9 @@ export let cards = [
     name: "Choices",
     cards: ["$100"],
   },
+  */
   { id: 3, category: 1, selected: false, name: "Fresh St. Market", cards: ["$50"] },
-  { id: 4, category: 1, selected: false, name: "Nesters", cards: ["$25", "$50", "$100", "$250"] },
+
 
   {
     id: 5,
@@ -103,20 +104,7 @@ export let cards = [
     name: "McDonald's",
     cards: ["$10", "$25", "$50"],
   },
-  {
-    id: 27,
-    category: 2,
-    selected: false,
-    name: "Moxie's",
-    cards: ["$25", "$50"],
-  },
-  {
-    id: 28,
-    category: 2,
-    selected: false,
-    name: "Old Spagetti Factory",
-    cards: ["$25"],
-  },
+
   {
     id: 29,
     category: 2,
@@ -183,13 +171,7 @@ export let cards = [
     name: "Options - Old Navy / Banana Rep / Gap / Athleta",
     cards: ["$25", "$50"],
   },
-  {
-    id: 45,
-    category: 3,
-    selected: false,
-    name: "H&M",
-    cards: ["$25", "$50"],
-  },
+
   {
     id: 46,
     category: 3,
@@ -227,13 +209,7 @@ export let cards = [
     name: "IKEA",
     cards: ["$50", "$100", "$250"],
   },
-  {
-    id: 54,
-    category: 4,
-    selected: false,
-    name: "Rona",
-    cards: ["$50"],
-  },
+
 
   /***** GAS STATIONS */
   {
@@ -267,13 +243,7 @@ export let cards = [
   },
 */
   /***** SPECIALTY STORES */
-  {
-    id: 71,
-    category: 6,
-    selected: false,
-    name: "Avis Car Rental",
-    cards: ["$50", "$100"],
-  },
+
   {
     id: 72,
     category: 6,
@@ -302,13 +272,7 @@ export let cards = [
     name: "DoorDash",
     cards: ["$25", "$50"],
   },
-  {
-    id: 76,
-    category: 6,
-    selected: false,
-    name: "Fairmount Hotels",
-    cards: ["$100"],
-  },
+
   {
     id: 77,
     category: 6,
@@ -330,13 +294,7 @@ export let cards = [
     name: "Shoppers Drug Mart",
     cards: ["$25", "$50"],
   },
-  {
-    id: 80,
-    category: 6,
-    selected: false,
-    name: "Spa Utopia",
-    cards: ["$50", "$100"],
-  },
+
   {
     id: 81,
     category: 6,
@@ -359,4 +317,65 @@ export let cards = [
     name: "Toys 'R Us",
     cards: ["$25"],
   },*/
+];
+
+export let preorder_cards = [
+  { id: 1001, category: 1, selected: false, name: "By Low", cards: ["$25", "$50", "$100"] },
+  {
+    id: 1002,
+    category: 1,
+    selected: false,
+    name: "Choices",
+    cards: ["$100"],
+  },
+  { id: 1004, category: 1, selected: false, name: "Nesters", cards: ["$25", "$50", "$100", "$250"] },
+  {
+    id: 27,
+    category: 2,
+    selected: false,
+    name: "Moxie's",
+    cards: ["$25", "$50"],
+  },
+  {
+    id: 28,
+    category: 2,
+    selected: false,
+    name: "Old Spagetti Factory",
+    cards: ["$25"],
+  },
+  {
+    id: 45,
+    category: 3,
+    selected: false,
+    name: "H&M",
+    cards: ["$25", "$50"],
+  },
+  {
+    id: 54,
+    category: 4,
+    selected: false,
+    name: "Rona",
+    cards: ["$50"],
+  },
+  {
+    id: 71,
+    category: 6,
+    selected: false,
+    name: "Avis Car Rental",
+    cards: ["$50", "$100"],
+  },
+  {
+    id: 76,
+    category: 6,
+    selected: false,
+    name: "Fairmount Hotels",
+    cards: ["$100"],
+  },
+  {
+    id: 80,
+    category: 6,
+    selected: false,
+    name: "Spa Utopia",
+    cards: ["$50", "$100"],
+  },
 ];
