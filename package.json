@@ -26,6 +26,7 @@
   },
   "type": "module",
   "dependencies": {
+    "autoprefixer": "^10.6.2",
     "aws-sdk": "^2.1693.0",
     "dotenv": "^16.6.1",
     "nodemailer": "^6.10.1",
