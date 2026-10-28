@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 
-  const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
+  const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY || process.env.RESEND_API_KEY);
 
   const data = await request.json();
   //console.log(data);
