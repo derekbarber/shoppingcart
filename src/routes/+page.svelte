@@ -447,7 +447,7 @@
                     id="memo"
                     bind:value={memo}
                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                  ></textarea>
                 </div>
               </div>
             </div>
@@ -460,9 +460,9 @@
               active: "p-4 text-white bg-blue-500 rounded-t-lg",
             }}
           >
-            <TabItem open title="In Stock Shopping Cards" class="p-4">
+            <TabItem open title="In Stock Shopping Cards" class="py-4 px-4">
               <div
-                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3"
+                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3 bg-white"
               >
                 <div>
                   <h2 class="text-3xl font-bold text-green-600 leading-7">
@@ -540,7 +540,7 @@
                                             )}
                                           type="number"
                                           name="{shopping_card.name}_{card}"
-                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5"
                                           placeholder="0"
                                           min="0"
                                           max="10"
@@ -562,7 +562,7 @@
 
             <TabItem title="Pre-Order Shopping Cards" class="p-4">
               <div
-                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3"
+                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3 bg-white"
               >
                 <div>
                   <h2 class="text-3xl font-bold text-orange-600 leading-7">
@@ -644,7 +644,7 @@
                                               )}
                                             type="number"
                                             name="{shopping_card.name}_{card}"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5"
                                             placeholder="0"
                                             min="0"
                                             max="10"
@@ -668,7 +668,7 @@
         </div>
 
         <div
-          class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
+          class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 bg-gray-50"
         >
           <div>
             <h2 class="text-lg font-semibold leading-7 text-gray-900">
@@ -771,9 +771,3 @@
     </form>
   </div>
 {/if}
-
-<style lang="postcss">
-  :global(html) {
-    background-color: theme(colors.gray.100);
-  }
-</style>
