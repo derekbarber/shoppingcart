@@ -1,8 +1,9 @@
 <script>
-  import logo from "$lib/images/pb-logo.jpg";
+  import logo from "#lib/images/pb-logo.jpg";
+  import { Tabs, TabItem } from "flowbite-svelte";
 
   import { fade } from "svelte/transition";
-  import { categories, cards } from "./cards.js";
+  import { categories, cards, preorder_cards } from "./cards.js";
 
   let name = "";
   let email = "";
@@ -16,8 +17,10 @@
 
   let errors = [];
   let shopping_cards = cards;
+  let preordered_shopping_cards = preorder_cards;
 
   let purchased_cards = [];
+  let preordered_cards = [];
 
   function addPurchasedCard(id, name, value, quantity) {
     let purchased_card = {
@@ -28,6 +31,17 @@
     };
 
     purchased_cards = [...purchased_cards, purchased_card];
+  }
+
+  function addPreorderedCard(id, name, value, quantity) {
+    let preordered_card = {
+      id: id,
+      name: name,
+      value: value,
+      quantity: quantity,
+    };
+
+    preordered_cards = [...preordered_cards, preordered_card];
   }
 
   function updatePurchasedCard(id, name, value, quantity) {
@@ -54,6 +68,30 @@
     }
   }
 
+  function updatePreorderedCard(id, name, value, quantity) {
+    if (quantity > 0) {
+      let found_card_index = preordered_cards.findIndex((pc) => pc.id === id);
+
+      if (found_card_index >= 0) {
+        preordered_cards[found_card_index] = {
+          id: id,
+          name: name,
+          value: value,
+          quantity: quantity,
+        };
+        totalCost();
+      } else {
+        addPreorderedCard(id, name, value, quantity);
+      }
+    } else if (quantity <= 0) {
+      let found_card_index = preordered_cards.findIndex((pc) => pc.id === id);
+      if (found_card_index >= 0) {
+        preordered_cards.splice(found_card_index, 1);
+        preordered_cards = preordered_cards;
+      }
+    }
+  }
+
   function calculateSubtotal(card) {
     let amount = card.value.replace(/[^0-9.-]+/g, "");
     return parseInt(amount, 10) * parseInt(card.quantity, 10);
@@ -63,6 +101,17 @@
     //console.log(purchased_cards);
     let total = 0;
     purchased_cards.forEach((pc) => {
+      let amount = pc.value.replace(/[^0-9.-]+/g, "");
+      let subtotal = parseInt(amount, 10) * parseInt(pc.quantity, 10);
+      total += subtotal;
+    });
+
+    return total;
+  }
+
+  function totalPreorderCost() {
+    let total = 0;
+    preordered_cards.forEach((pc) => {
       let amount = pc.value.replace(/[^0-9.-]+/g, "");
       let subtotal = parseInt(amount, 10) * parseInt(pc.quantity, 10);
       total += subtotal;
@@ -115,7 +164,9 @@
         need_passphrase: need_passphrase,
         memo: memo,
         purchased_cards: purchased_cards,
+        preordered_cards: preordered_cards,
         total_cost: totalCost(),
+        total_preorder_cost: totalPreorderCost(),
       }),
     });
   }
@@ -134,7 +185,7 @@
     <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
       Did you know?
     </h2>
-    <div class="mt-10 flex items-center gap-x-6 lg:mt-4 lg:flex-shrink-0">
+    <div class="mt-10 flex items-center gap-x-6 lg:mt-4 lg:shrink-0">
       200 families spending $150/week through this program instead of their
       credit card can raise over $75,000/year for Precious Blood Parish.
     </div>
@@ -168,7 +219,7 @@
 
 {#if errors.length > 0}
   <div transition:fade={{ delay: 250, duration: 300 }}>
-    <div class="mt-6 p-4 border rounded border-red-400 bg-red-50">
+    <div class="mt-6 p-4 border rounded-sm border-red-400 bg-red-50">
       <p class="text-lg font-bold">
         Please fix the following issues with your form:
       </p>
@@ -183,19 +234,18 @@
 
 {#if submitted}
   <div transition:fade={{ delay: 250, duration: 300 }}>
-    <div class="mt-6 p-4 border rounded border-green-400 bg-green-50">
+    <div class="mt-6 p-4 border rounded-sm border-green-400 bg-green-50">
       <p class="text-lg font-bold mt-6">
         Thank you for submitting your shopping card request, it has been sent
         successfully!
       </p>
       <p class="text-lg mt-6">
-        Please see your email for a confirmation from <strong
-          >cards@pbcards.ca</strong
-        >. Note:
-        <em
-          >If you don't recieve an email within a few minutes please check your
-          SPAM folder and be sure to whitelist emails from cards@pbcards.ca.</em
-        >
+        Please see your email for a confirmation from
+        <strong>cards@pbcards.ca</strong>. Note:
+        <em>
+          If you don't recieve an email within a few minutes please check your
+          SPAM folder and be sure to whitelist emails from cards@pbcards.ca.
+        </em>
       </p>
     </div>
   </div>
@@ -204,7 +254,7 @@
     <form class="mt-6">
       <div class="space-y-6">
         <div
-          class="grid grid-cols-1 gap-x-8 gap-y-10 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 rounded bg-white"
+          class="grid grid-cols-1 gap-x-8 gap-y-10 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 rounded-sm bg-white"
         >
           <div>
             <h2 class="text-base font-semibold leading-7 text-gray-900">
@@ -227,14 +277,14 @@
               >
               <div class="mt-2">
                 <div
-                  class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+                  class="flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
                 >
                   <input
                     type="text"
                     name="name"
                     id="name"
                     bind:value={name}
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -253,7 +303,7 @@
                   type="email"
                   bind:value={email}
                   autocomplete="email"
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -270,7 +320,7 @@
                   name="how_paying"
                   bind:value={how_paying}
                   autocomplete="etransfer"
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="etransfer">Interact e-Transfer</option>
                   <option value="cash">Cash</option>
@@ -331,7 +381,7 @@
                   name="phone_number"
                   type="text"
                   bind:value={phone_number}
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
               {#if how_paying === "etransfer" && need_passphrase}
@@ -353,7 +403,7 @@
                   id="pickup-location"
                   name="pickup-location"
                   bind:value={pickup_location}
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Choose Pickup Location and Time</option>
                   <option value="Saturday 4:30pm Mass"
@@ -390,112 +440,235 @@
               >
               <div class="mt-2">
                 <div
-                  class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+                  class="flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
                 >
                   <textarea
                     name="memo"
                     id="memo"
                     bind:value={memo}
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  ></textarea>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div
-          class="grid grid-cols-1 gap-x-8 gap-y-10 shadow bg-white rounded p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
-        >
-          <div>
-            <h2 class="text-base font-semibold leading-7 text-gray-900">
-              Shopping Card Selection
-            </h2>
-            <p class="mt-1 text-sm leading-6 text-gray-600">
-              Choose the Shopping Cards for your order. Most of these cards are
-              in inventory but some are only available upon request. You will be
-              notified if any cards are not in stock after you submit your
-              order.
-            </p>
-          </div>
-
-          <div
-            class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-4 md:col-span-2"
+        <div class="rounded-sm border border-gray-900/10 bg-white">
+          <Tabs
+            classes={{
+              active: "p-4 text-white bg-blue-500 rounded-t-lg",
+            }}
           >
-            {#each categories as category}
-              <div class="sm:col-span-2">
-                <p class="text-2xl font-bold text-blue-600 uppercase mb-2">
-                  {category.name}
-                </p>
+            <TabItem open title="In Stock Shopping Cards" class="py-4 px-4">
+              <div
+                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3 bg-white"
+              >
+                <div>
+                  <h2 class="text-3xl font-bold text-green-600 leading-7">
+                    IN STOCK
+                  </h2>
+                  <h2
+                    class="text-xl font-semibold leading-7 text-green-700 mt-2"
+                  >
+                    Shopping Card Selection
+                  </h2>
+                  <p class="mt-1 text-base leading-6 text-gray-600 mt-4">
+                    Choose the Shopping Cards for your order. These cards should
+                    be available in inventory, however if any cards are not in
+                    stock after you submit your order we will notify you.
+                  </p>
+                </div>
 
-                <div class="grid grid-cols-1 gap-y-3">
-                  {#each shopping_cards.filter((e) => e.category === category.id) as shopping_card, i}
-                    <div class="relative flex gap-x-3">
-                      <div class="flex h-6 items-center">
-                        <input
-                          bind:checked={shopping_card.selected}
-                          id="shopping_card_{shopping_card.id}"
-                          name="shopping_card_{shopping_card.name}"
-                          type="checkbox"
-                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
-                      </div>
-                      <div class="text-sm leading-6">
-                        <label
-                          for="shopping_card_{shopping_card.id}"
-                          class="font-medium text-gray-900"
-                        >
-                          <span class="text-base">
-                            {shopping_card.name}
-                          </span>
-                          <span class="text-gray-600">
-                            ({shopping_card.cards.join(", ")})
-                          </span>
-                        </label>
-                        {#if shopping_card.selected}
-                          <div
-                            class="border border-gray-50 rounded shadow-lg p-2 mb-4"
-                          >
-                            <p class="italic py-2 mb-1 text-sm">
-                              Enter the number of cards you want
-                            </p>
-                            <div class="py-2 flex flex-wrap gap-x-3 gap-y-4">
-                              {#each shopping_card.cards as card, cardIdx}
-                                <div>
-                                  <span class="text-sm text-gray-700 mr-2"
-                                    >{card}</span
+                <div
+                  class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-4 md:col-span-2"
+                >
+                  {#each categories as category}
+                    <div class="sm:col-span-2">
+                      <p
+                        class="text-2xl font-bold text-blue-600 uppercase mb-2"
+                      >
+                        {category.name}
+                      </p>
+
+                      <div class="grid grid-cols-1 gap-y-3">
+                        {#each shopping_cards.filter((e) => e.category === category.id) as shopping_card, i}
+                          <div class="relative flex gap-x-3">
+                            <div class="flex h-6 items-center">
+                              <input
+                                bind:checked={shopping_card.selected}
+                                id="shopping_card_{shopping_card.id}"
+                                name="shopping_card_{shopping_card.name}"
+                                type="checkbox"
+                                class="h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              />
+                            </div>
+                            <div class="text-sm leading-6">
+                              <label
+                                for="shopping_card_{shopping_card.id}"
+                                class="font-medium text-gray-900"
+                              >
+                                <span class="text-base">
+                                  {shopping_card.name}
+                                </span>
+                                <span class="text-gray-600">
+                                  ({shopping_card.cards.join(", ")})
+                                </span>
+                              </label>
+                              {#if shopping_card.selected}
+                                <div
+                                  class="border border-gray-50 rounded-sm shadow-lg p-2 mb-4"
+                                >
+                                  <p class="italic py-2 mb-1 text-sm">
+                                    Enter the number of cards you want
+                                  </p>
+                                  <div
+                                    class="py-2 flex flex-wrap gap-x-3 gap-y-4"
                                   >
-                                  <input
-                                    on:change={(e) =>
-                                      updatePurchasedCard(
-                                        `${shopping_card.id}-${cardIdx}`,
-                                        shopping_card.name,
-                                        card,
-                                        e.target.value,
-                                      )}
-                                    type="number"
-                                    name="{shopping_card.name}_{card}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="0"
-                                    min="0"
-                                    max="10"
-                                  />
+                                    {#each shopping_card.cards as card, cardIdx}
+                                      <div>
+                                        <span class="text-sm text-gray-700 mr-2"
+                                          >{card}</span
+                                        >
+                                        <input
+                                          on:change={(e) =>
+                                            updatePurchasedCard(
+                                              `${shopping_card.id}-${cardIdx}`,
+                                              shopping_card.name,
+                                              card,
+                                              e.target.value,
+                                            )}
+                                          type="number"
+                                          name="{shopping_card.name}_{card}"
+                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                          placeholder="0"
+                                          min="0"
+                                          max="10"
+                                        />
+                                      </div>
+                                    {/each}
+                                  </div>
                                 </div>
-                              {/each}
+                              {/if}
                             </div>
                           </div>
-                        {/if}
+                        {/each}
                       </div>
                     </div>
                   {/each}
                 </div>
               </div>
-            {/each}
-          </div>
+            </TabItem>
+
+            <TabItem title="Pre-Order Shopping Cards" class="p-4">
+              <div
+                class="grid grid-cols-1 gap-x-8 rounded-sm p-6 pb-8 md:grid-cols-3 bg-white"
+              >
+                <div>
+                  <h2 class="text-3xl font-bold text-orange-600 leading-7">
+                    PRE-ORDER (not in stock)
+                  </h2>
+                  <h2
+                    class="text-xl font-semibold leading-7 text-orange-700 mt-2"
+                  >
+                    Shopping Card Selection
+                  </h2>
+                  <p class="text-base leading-6 text-gray-600 mt-4">
+                    Choose the Shopping Cards for your order. These cards are
+                    not currently in stock and will be ordered for you. Please
+                    allow extra time for these cards to be ordered and delivered
+                    to you. We will notify you when your pre-ordered cards are
+                    ready for pickup.
+                  </p>
+                </div>
+
+                <div
+                  class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-4 md:col-span-2"
+                >
+                  {#each categories as category}
+                    {#if preordered_shopping_cards.filter((e) => e.category === category.id).length > 0}
+                      <div class="sm:col-span-2">
+                        <p
+                          class="text-2xl font-bold text-blue-600 uppercase mb-2"
+                        >
+                          {category.name}
+                        </p>
+
+                        <div class="grid grid-cols-1 gap-y-3">
+                          {#each preordered_shopping_cards.filter((e) => e.category === category.id) as shopping_card, i}
+                            <div class="relative flex gap-x-3">
+                              <div class="flex h-6 items-center">
+                                <input
+                                  bind:checked={shopping_card.selected}
+                                  id="shopping_card_{shopping_card.id}"
+                                  name="shopping_card_{shopping_card.name}"
+                                  type="checkbox"
+                                  class="h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                />
+                              </div>
+                              <div class="text-sm leading-6">
+                                <label
+                                  for="shopping_card_{shopping_card.id}"
+                                  class="font-medium text-gray-900"
+                                >
+                                  <span class="text-base">
+                                    {shopping_card.name}
+                                  </span>
+                                  <span class="text-gray-600">
+                                    ({shopping_card.cards.join(", ")})
+                                  </span>
+                                </label>
+                                {#if shopping_card.selected}
+                                  <div
+                                    class="border border-gray-50 rounded-sm shadow-lg p-2 mb-4"
+                                  >
+                                    <p class="italic py-2 mb-1 text-sm">
+                                      Enter the number of cards you want
+                                    </p>
+                                    <div
+                                      class="py-2 flex flex-wrap gap-x-3 gap-y-4"
+                                    >
+                                      {#each shopping_card.cards as card, cardIdx}
+                                        <div>
+                                          <span
+                                            class="text-sm text-gray-700 mr-2"
+                                            >{card}</span
+                                          >
+                                          <input
+                                            on:change={(e) =>
+                                              updatePreorderedCard(
+                                                `${shopping_card.id}-${cardIdx}`,
+                                                shopping_card.name,
+                                                card,
+                                                e.target.value,
+                                              )}
+                                            type="number"
+                                            name="{shopping_card.name}_{card}"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                            placeholder="0"
+                                            min="0"
+                                            max="10"
+                                          />
+                                        </div>
+                                      {/each}
+                                    </div>
+                                  </div>
+                                {/if}
+                              </div>
+                            </div>
+                          {/each}
+                        </div>
+                      </div>
+                    {/if}
+                  {/each}
+                </div>
+              </div>
+            </TabItem>
+          </Tabs>
         </div>
 
         <div
-          class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3"
+          class="grid grid-cols-1 gap-x-8 gap-y-10 bg-white-50 p-6 border border-gray-900/10 pb-8 md:grid-cols-3 bg-gray-50"
         >
           <div>
             <h2 class="text-lg font-semibold leading-7 text-gray-900">
@@ -504,35 +677,79 @@
           </div>
 
           <div
-            class="max-w-2xl space-y-10 md:col-span-2 bg-white shadow rounded py-8 px-6"
+            class="max-w-2xl space-y-4 md:col-span-2 bg-white shadow-sm rounded-sm py-8 px-6"
           >
-            {#if purchased_cards.length > 0}
-              <h3 class="text-xl font-semibold text-gray-800">
-                Your Selected Cards
-              </h3>
-              <div class="w-full grid grid-cols-2 py-2 mt-6 gap-y-2">
-                {#each purchased_cards as purchased_card}
-                  <div class="text-lg text-gray-600">
-                    <span class="text-gray-800 font-semibold"
-                      >{purchased_card.name}</span
-                    >: {purchased_card.value}
-                    x {purchased_card.quantity}
-                  </div>
-                  <div class="text-xl font-bold text-right">
-                    ${calculateSubtotal(purchased_card)}
-                  </div>
-                {/each}
-              </div>
-              {#key purchased_cards}
-                <div
-                  class="flex justify-between border-t border-gray-300 py-2 mt-6"
-                >
-                  <div class="text-lg font-bold">TOTAL AMOUNT</div>
-                  <div class="text-xl font-bold">
-                    ${totalCost()}
-                  </div>
+            {#if purchased_cards.length > 0 || preordered_cards.length > 0}
+              {#if purchased_cards.length > 0}
+                <h3 class="text-xl font-semibold text-green-800">
+                  YOUR CURRENT ORDER OF IN-STOCK CARDS
+                </h3>
+                <div class="w-full grid grid-cols-2 py-2 mt-6 gap-y-2">
+                  {#each purchased_cards as purchased_card}
+                    <div class="text-lg text-gray-600">
+                      <span class="text-gray-800 font-semibold"
+                        >{purchased_card.name}</span
+                      >: {purchased_card.value}
+                      x {purchased_card.quantity}
+                    </div>
+                    <div class="text-xl font-bold text-right">
+                      ${calculateSubtotal(purchased_card)}
+                    </div>
+                  {/each}
                 </div>
-              {/key}
+                {#key purchased_cards}
+                  <div
+                    class="flex justify-between border-t border-gray-300 py-2 mt-6"
+                  >
+                    <div class="text-lg font-bold">
+                      TOTAL AMOUNT DUE FOR THIS ORDER OF IN-STOCK CARDS
+                    </div>
+                    <div class="text-xl font-bold">
+                      ${totalCost()}
+                    </div>
+                  </div>
+                {/key}
+              {/if}
+
+              {#if preordered_cards.length > 0}
+                <div
+                  class="border bg-gray-50 rounded-sm border-gray-300 p-6 mt-6"
+                >
+                  <h3 class="text-lg font-semibold text-amber-800">
+                    You also selected some pre-ordered cards.
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2">
+                    These cards are not part of your current order and you will
+                    be notified when they are available.
+                  </p>
+                  <div class="w-full grid grid-cols-2 py-2 mt-2 gap-y-2">
+                    {#each preordered_cards as preordered_card}
+                      <div class="text-lg text-gray-600">
+                        <span class="text-gray-800 font-semibold"
+                          >{preordered_card.name}</span
+                        >: {preordered_card.value}
+                        x {preordered_card.quantity}
+                      </div>
+                      <div class="text-xl font-bold text-right">
+                        ${calculateSubtotal(preordered_card)}
+                      </div>
+                    {/each}
+                  </div>
+                  {#key preordered_cards}
+                    <div
+                      class="flex justify-between border-t border-gray-300 py-2 mt-4"
+                    >
+                      <div class="text-base font-semibold">
+                        TOTAL AMOUNT FOR PRE-ORDERED CARDS (not due at this
+                        time)
+                      </div>
+                      <div class="text-xl font-bold">
+                        ${totalCost()}
+                      </div>
+                    </div>
+                  {/key}
+                </div>
+              {/if}
             {:else}
               <p class="text-lg italic">
                 Your shopping card order will be summarized here as you select
@@ -547,16 +764,10 @@
         <button
           type="submit"
           on:click={submitOrder}
-          class="rounded-md bg-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          class="rounded-md bg-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >SUBMIT ORDER</button
         >
       </div>
     </form>
   </div>
 {/if}
-
-<style lang="postcss">
-  :global(html) {
-    background-color: theme(colors.gray.100);
-  }
-</style>

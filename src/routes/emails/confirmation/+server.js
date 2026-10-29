@@ -1,9 +1,11 @@
 import { Resend } from 'resend';
 
-const resend = new Resend('re_caxSRCyD_53aJRtXz68CKmATZdtcXwehk');
+const apiKey = import.meta.env.VITE_RESEND_API_KEY || process.env.RESEND_API_KEY;
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
+
+  const resend = new Resend(apiKey);
 
   const data = await request.json();
   //console.log(data);
@@ -26,14 +28,26 @@ export async function POST({ request }) {
     order_html += `<p style="font-size: 15px;">Do they need the passphrase?</strong> <span style="color: blue; font-weight: 600;">NO</span></p>`
   }
 
-  order_html += `<p style="font-size: 15px;"><strong>Shopping Cards Requested:</strong></p>`
+  order_html += `<p style="font-size: 15px;"><strong>IN-STOCK Shopping Cards Requested:</strong></p>`
   order_html += `<ul>`
   for (const purchased_card of data.purchased_cards) {
     order_html += `<li style="font-size: 14px;"><strong>${purchased_card.name}:</strong> ${purchased_card.value} x ${purchased_card.quantity}</li>`
   }
   order_html += `</ul>`
 
-  order_html += `<p style="font-size: 15px;"><strong>TOTAL COST: $${data.total_cost}</strong></p>`
+  order_html += `<p style="font-size: 15px;"><strong>TOTAL COST FOR THIS ORDER: $${data.total_cost}</strong></p>`
+
+  if (data.preordered_cards.length > 0) {
+    order_html += '<hr style="border-top: 1px solid #ccc; margin: 20px 0;">'
+    order_html += `<p style="font-size: 15px;"><strong>PRE-ORDER Shopping Cards</strong></p>`
+    order_html += `<p style="font-size: 13px;">They also selected some PRE-ORDER Shopping Cards, these are not part of this current order.</strong></p>`
+    order_html += `<p style="font-size: 14px;"><strong>PRE-ORDER Shopping Cards Requested:</strong></p>`
+    order_html += `<ul>`
+    for (const preordered_card of data.preordered_cards) {
+      order_html += `<li style="font-size: 14px;"><strong>${preordered_card.name}:</strong> ${preordered_card.value} x ${preordered_card.quantity}</li>`
+    }
+    order_html += `</ul>`
+  }
 
   const { result1, error1 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
@@ -77,6 +91,18 @@ export async function POST({ request }) {
 
   confirmation_html += `<p style="font-size: 14px;">Don't hesitate to reach out to Earl Coatta at ecoatta@telus.net if you have any questions or concerns.</p>`
   confirmation_html += `<p style="font-size: 14px;">Thank you for supporting Precious Blood Parish!</p>`
+
+  if (data.preordered_cards.length > 0) {
+    confirmation_html += '<hr style="border-top: 1px solid #ccc; margin: 20px 0;">'
+    confirmation_html += `<p style="font-size: 15px;"><strong>You also selected some PRE-ORDER Shopping Cards, these are not part of this current order and you will be notified when they are available.</strong></p>`
+    confirmation_html += `<p style="font-size: 14px;">PRE-ORDER Shopping Cards Requested:</p>`
+    confirmation_html += `<ul>`
+    for (const preordered_card of data.preordered_cards) {
+      confirmation_html += `<li style="font-size: 14px;"><strong>${preordered_card.name}:</strong> ${preordered_card.value} x ${preordered_card.quantity}</li>`
+    }
+    confirmation_html += `</ul>`
+    confirmation_html += `<p style="font-size: 15px;"><strong>Do not send any payment for these cards at this time, we will notify you when they are available.</strong></p>`
+  }
 
   const { result2, error2 } = await resend.emails.send({
     from: 'cards@pbcards.ca',
