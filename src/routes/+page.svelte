@@ -56,6 +56,7 @@
           quantity: quantity,
         };
         totalCost();
+        totalPreorderCost();
       } else {
         addPurchasedCard(id, name, value, quantity);
       }
@@ -80,6 +81,7 @@
           quantity: quantity,
         };
         totalCost();
+        totalPreorderCost();
       } else {
         addPreorderedCard(id, name, value, quantity);
       }
@@ -744,7 +746,7 @@
                         time)
                       </div>
                       <div class="text-xl font-bold">
-                        ${totalCost()}
+                        ${totalPreorderCost()}
                       </div>
                     </div>
                   {/key}

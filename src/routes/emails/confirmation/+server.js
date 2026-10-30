@@ -47,6 +47,7 @@ export async function POST({ request }) {
       order_html += `<li style="font-size: 14px;"><strong>${preordered_card.name}:</strong> ${preordered_card.value} x ${preordered_card.quantity}</li>`
     }
     order_html += `</ul>`
+    order_html += `<p style="font-size: 15px;"><strong>TOTAL COST FOR PRE-ORDERED CARD ORDER: $${data.total_preorder_cost}</strong></p>`
   }
 
   const { result1, error1 } = await resend.emails.send({
@@ -101,7 +102,8 @@ export async function POST({ request }) {
       confirmation_html += `<li style="font-size: 14px;"><strong>${preordered_card.name}:</strong> ${preordered_card.value} x ${preordered_card.quantity}</li>`
     }
     confirmation_html += `</ul>`
-    confirmation_html += `<p style="font-size: 15px;"><strong>Do not send any payment for these cards at this time, we will notify you when they are available.</strong></p>`
+    confirmation_html += `<p style="font-size: 15px;"><strong>TOTAL COST FOR PRE-ORDERED CARD ORDER: $${data.total_preorder_cost}</strong></p>`
+    confirmation_html += `<p style="font-size: 14px;">Note: Do not send any payment for these pre-ordered cards at this time, we will notify you when they are available.</p>`
   }
 
   const { result2, error2 } = await resend.emails.send({
